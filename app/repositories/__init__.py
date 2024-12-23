@@ -4,5 +4,5 @@ __all__ = (
 )
 
 
-from .users import UserRepository
-from .posts import PostRepository
+from .users.users import UserRepository
+from .posts.posts import PostRepository
