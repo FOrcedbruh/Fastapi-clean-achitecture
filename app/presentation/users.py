@@ -1,8 +1,10 @@
 from fastapi import APIRouter, Depends, Body
 from services import UserService
-from schemas.users import UserReadSchema, UserCreateSchema, UserUpdateSchema
+from schemas.users import UserReadSchema, UserCreateSchema, UserUpdateSchema, UserReadWithPostsSchema
+
 
 router = APIRouter(prefix="/users", tags=["Users"])
+
 
 @router.get("/", response_model=list[UserReadSchema])
 async def index(
@@ -26,6 +28,7 @@ async def index(
 ) -> UserReadSchema:
     return await service.create_user(user_in=user_in)
 
+
 @router.patch("/update/{user_id}")
 async def index(
     user_id: int,
@@ -42,9 +45,10 @@ async def index(
 ) -> dict:
     return await service.delete_user(user_id=user_id)
 
-@router.get("/get_user_with_posts/{user_id}")
+
+@router.get("/get_user_with_posts/{user_id}", response_model=list[UserReadWithPostsSchema])
 async def index(
     user_id: int,
     service: UserService = Depends(UserService)
-):
+) -> list[UserReadWithPostsSchema]:
     return await service.get_user_with_posts(user_id=user_id)

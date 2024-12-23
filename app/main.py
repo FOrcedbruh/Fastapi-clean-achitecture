@@ -7,7 +7,11 @@ from repositories.exceptions import NotFoundError
 
 
 
-app = FastAPI()
+
+app = FastAPI(
+    title="Clean Architecture API with FastAPI"
+)
+
 app.include_router(router=MainRouter)
 app.add_middleware(
     CORSMiddleware,
@@ -16,11 +20,13 @@ app.add_middleware(
     allow_headers=["*"]
 )
 
+
 @app.get("/")
 def index():
     return {
         "message": "Hello"
     }
+
 
 @app.exception_handler(NotFoundError)
 def index(requset, exc: NotFoundError):

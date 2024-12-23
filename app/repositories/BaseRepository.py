@@ -8,13 +8,14 @@ from .exceptions import NotFoundError
 
 
 TableType = TypeVar(name="TableType", bound=Base)
+ExcType = TypeVar(name="ExcType", bound=NotFoundError)
 
 
 class BaseRepository(Generic[TableType]):
-    def __init__(self, table: TableType, session: AsyncSession, tablename: str):
+    def __init__(self, table: TableType, session: AsyncSession, Exc: ExcType):
         self.table = table
         self.session = session
-        self.tablename = tablename
+        self.Exc = Exc
 
 
     async def list(self) -> list[TableType]:
@@ -23,13 +24,13 @@ class BaseRepository(Generic[TableType]):
         res = stmt.scalars().all()
 
         if not res:
-            raise NotFoundError(messsage=f"{self.tablename} не найдены", status_code=400)
+            raise self.Exc
         return list(res)
     
     async def get(self, id: int) -> TableType:
         res = await self.session.get(self.table, id)
         if not res:
-            raise NotFoundError(messsage=f"{self.tablename} не найден", status_code=400)
+            raise self.Exc
         return res
     
     async def create(self, data: TableType) -> TableType:
@@ -43,7 +44,7 @@ class BaseRepository(Generic[TableType]):
         res = await self.session.get(self.table, id)
 
         if not res:
-            raise NotFoundError(messsage=f"{self.tablename} не найден", status_code=400)
+            raise self.Exc
         await self.session.delete(res)
         await self.session.commit()
 

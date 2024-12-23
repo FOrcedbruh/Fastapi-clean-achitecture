@@ -7,7 +7,6 @@ class PostCreateSchema(BaseModel):
     body: str
     user_id: int
 
-
 class PostReadSchema(PostCreateSchema):
     id: int
     created_at: datetime

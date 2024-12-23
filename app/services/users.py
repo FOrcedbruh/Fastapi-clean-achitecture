@@ -1,5 +1,5 @@
 from repositories import UserRepository
-from schemas.users import UserCreateSchema, UserUpdateSchema, UserReadSchema
+from schemas.users import UserCreateSchema, UserUpdateSchema, UserReadSchema, UserReadWithPostsSchema
 from models import User
 from sqlalchemy.ext.asyncio import AsyncSession
 from fastapi import Depends
@@ -35,5 +35,5 @@ class UserService:
             "message": "Пользователь успешно удален"
         }
     
-    async def get_user_with_posts(self, user_id: int):
+    async def get_user_with_posts(self, user_id: int) -> list[UserReadWithPostsSchema]:
         return await self.repository.get_with_posts(id=user_id)
