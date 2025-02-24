@@ -1,7 +1,7 @@
 __all__ = (
     "settings",
-    "db"
+    "DB"
 )
 
 from .settings import settings
-from .db import db
+from .db import DB

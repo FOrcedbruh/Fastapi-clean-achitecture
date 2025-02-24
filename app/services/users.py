@@ -3,10 +3,12 @@ from schemas.users import UserCreateSchema, UserUpdateSchema, UserReadSchema, Us
 from models import User
 from sqlalchemy.ext.asyncio import AsyncSession
 from fastapi import Depends
-from config import db
+from config import DB
+
+local_session = DB()
 
 class UserService:
-    def __init__(self, session: AsyncSession = Depends(db.generate_session)) -> None:
+    def __init__(self, session: AsyncSession = Depends(local_session.generate_session)) -> None:
         self.repository = UserRepository(session=session)
 
 

@@ -1,0 +1,48 @@
+version: '3.9'
+services:
+  app:
+    build:
+      context: ../../
+      dockerfile: docker/api/dockerfile
+    ports:
+      - 6060:6060
+    depends_on:
+      - postgres
+    volumes:
+      - ../../app:/app
+    restart: always
+    env_file:
+      - ../../app/.env
+    networks:
+      - custom
+
+  postgres:
+    container_name: db
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_PASSWORD: "admin"
+      POSTGRES_USER: "postgres"
+      POSTGRES_DB: "CleanDB"
+    ports:
+      - "5433:5432"
+    restart: always
+    volumes:
+      - .postgres:/var/lib/postgresql/data
+    networks:
+      - custom
+
+  prometheus:
+    image: prom/prometheus
+    volumes:
+      - ../../app/prometheus.yml:/etc/prometheus/prometheus.yml
+    ports:
+      - 9090:9090
+    depends_on:
+      - app
+    networks:
+      - custom
+
+networks:
+  custom:
+    driver:
+      bridge

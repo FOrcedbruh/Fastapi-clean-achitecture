@@ -1,0 +1,8 @@
+fastapi[all]
+pydantic
+bcrypt
+asyncpg
+sqlalchemy
+python-dotenv
+alembic
+prometheus_fastapi_instrumentator

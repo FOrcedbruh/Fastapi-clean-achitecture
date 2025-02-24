@@ -4,7 +4,7 @@ from config import settings
 from presentation import router as MainRouter
 from fastapi.middleware.cors import CORSMiddleware
 from repositories.exceptions import NotFoundError
-
+from prometheus_fastapi_instrumentator import Instrumentator
 
 
 
@@ -35,8 +35,7 @@ def index(requset, exc: NotFoundError):
         detail=exc.message
     )
 
-
-
+Instrumentator().instrument(app).expose(app)
 
 if __name__ == "__main__":
     uvicorn.run(app="main:app", port=settings.runcfg.port, host=settings.runcfg.host, reload=bool(settings.runcfg.reload))

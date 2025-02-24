@@ -19,7 +19,3 @@ class DB():
     async def generate_session(self) -> AsyncSession:
         async with self.session_factory() as session:
             yield session
-
-
-
-db = DB()

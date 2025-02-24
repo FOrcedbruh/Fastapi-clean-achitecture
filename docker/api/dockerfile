@@ -1,16 +1,19 @@
-FROM python:latest
+FROM python:3.12.7
+
 
 WORKDIR /app
 
-ENV PYTHONDONTWRITEBYTECODE 1
-ENV PYTHONUNBUFFERED 1
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
+ENV PIP_NO_CACHE_OFF=off
+ENV PIP_DISABLE_PIP_VERSION_CHECK=on
 
-RUN curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python -
+COPY ../../app .
 
-COPY pyproject.toml poetry/lock ./
+RUN pip install --upgrade pip && \
+    pip install --no-cache-dir --upgrade -r requirements.txt
+    
 
-RUN poetry config virtualenvs.create false &&  poetry install --no-dev
+RUN chmod +x ../../app/entrypoint.sh
 
-COPY . .
-
-CMD [ "python", "main.py" ]
+ENTRYPOINT [ "../../app/entrypoint.sh" ]

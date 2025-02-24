@@ -1,12 +1,14 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from fastapi import Depends
-from config import db
+from config import DB
 from repositories import PostRepository
 from schemas.posts import PostReadSchema, PostCreateSchema
 from models import Post
 
+local_session = DB()
+
 class PostService:
-    def __init__(self, session: AsyncSession = Depends(db.generate_session)):
+    def __init__(self, session: AsyncSession = Depends(local_session.generate_session)):
         self.repository = PostRepository(session=session)
 
     async def get_posts(self) -> list[PostReadSchema]:
